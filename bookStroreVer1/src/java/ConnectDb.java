@@ -42,7 +42,7 @@ public class ConnectDb {
             Statement stmt = (Statement) con.createStatement();
             return stmt;
         } catch (SQLException ex) {
-            System.out.println("erooooooooooooooooooooor  in db");
+            System.out.println("eroooooooooooooooooooor  in db");
             return null;
         }
     }
