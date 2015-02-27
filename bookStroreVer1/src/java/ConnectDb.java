@@ -18,7 +18,7 @@ public class ConnectDb {
     private final String schemaName = "jdbc:mysql://localhost:3307/bookStore";
     private final String username = "root";
     private final String password = "1234";
-     private userBean user = null;
+    private userBean user = null;
 
     public String getSchemaName() {
         return schemaName;
@@ -48,10 +48,10 @@ public class ConnectDb {
     }
 
     public userBean signIn(String email, String password) {
-         user = null;
+        user = null;
         try {
-            ConnectDb con = new ConnectDb();
-            Statement stmt = con.getStatment();
+          
+            Statement stmt = getStatment();
             ResultSet rs = stmt.executeQuery(" SELECT * FROM user where email = '" + email + "' and password ='" + password + "'");
             if (rs.next()) {
                 user = new userBean();
@@ -73,7 +73,33 @@ public class ConnectDb {
         return user;
     }
 
-    public userBean getUser(){
+    public userBean getUser() {
         return user;
     }
+
+    //sign up method 
+    public boolean signUp(userBean user) {
+        String email = user.getEmail();
+        String first = user.getFirstname();
+        String last = user.getLastname();
+
+        String pass = user.getPassword();
+        String job = user.getJab();
+        String birthDay = user.getBirthday();
+        String address = user.getAddress();
+        int credit = user.getCreditBalance();
+
+    
+
+            try {
+               // ConnectDb con = new ConnectDb();
+                Statement stmt = getStatment();
+                stmt.executeUpdate(" insert into user(email ,firstName ,lastName ,password,job ,birthday ,address ,creditBalance ) values ('" + email + "' ,'" + first + "','" + last + "' ,'" + pass + "' ,'" + job + "' ,'" + birthDay + "' ,'" + address + "' ," + credit + ")");
+                return true;
+            } catch (Exception e) {
+                System.out.println("insert errrrrrrrrrrrror");
+                return false;
+            }
+        }
+///////// end ofsign up method
 }

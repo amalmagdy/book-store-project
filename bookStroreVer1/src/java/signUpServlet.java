@@ -10,13 +10,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author amal magdi
  */
-public class signInServlet extends HttpServlet {
+public class signUpServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,37 +28,23 @@ public class signInServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        ConnectDb signInDb=new ConnectDb();
-        String email=request.getParameter("email");
-        String pass=request.getParameter("password");
-        if(signInDb.signIn(email, pass)!=null){
-            
-          HttpSession s= request.getSession();
-          userBean user=signInDb.getUser();
-          s.setAttribute("email", user.getEmail());
-          s.setAttribute("password", user.getPassword());
-          s.setAttribute("creditBalance", user.getCreditBalance());
-          s.setAttribute("firstname", user.getFirstname());
-          s.setAttribute("lastname", user.getLastname());
-            response.sendRedirect("book_store/index.html");
-            
-        }
-        else 
-            response.sendRedirect("book_store/myaccounterr.html");
+        userBean user=new userBean();
+        user.setEmail(request.getParameter("email"));
+        user.setPassword(request.getParameter("password"));
+        user.setFirstname(request.getParameter("firstName"));
+        user.setLastname(request.getParameter("lastName"));
+        user.setAddress(request.getParameter("address"));
+        user.setJob(request.getParameter("job"));
         
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet signInServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>"  + email + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        user.setCreditBalance(Integer.parseInt(request.getParameter("credit")));
+        
+        
+        user.setBirthday(request.getParameter("birthday"));
+        ConnectDb con=new ConnectDb();
+        if(con.signUp(user))
+             response.sendRedirect("book_store/index.html");
+        else  response.sendRedirect("book_store/registererr.html");
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
